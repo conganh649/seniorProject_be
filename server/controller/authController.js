@@ -10,7 +10,7 @@ exports.signup = async (req, res) => {
     const user = await userService.createOne(req);
     res.status(200).json({
       success: true,
-      message: "Create user successfully",
+      message: "Sign up successfully",
       data: user,
     });
   } catch (error) {
@@ -26,8 +26,8 @@ exports.signup = async (req, res) => {
 
 exports.signin = async (req, res) => {
   try {
-    const { userName, password } = req.body;
-    const result = await userService.signin(userName, password);
+    const { idCard, password } = req.body;
+    const result = await userService.signin(idCard, password);
     return res.status(200).json({
       success: true,
       message: "login successfully",
@@ -37,13 +37,13 @@ exports.signin = async (req, res) => {
     if (!error.status) {
       if (error.message === "invalid_password") {
         return res
-          .status(400)
+          .status(401)
           .json({ success: false, message: "Invalid password" });
       }
       if (error.message === "incorrect_username") {
         return res
-          .status(400)
-          .json({ success: false, message: "Username is not found" });
+          .status(404)
+          .json({ success: false, message: "IDcard is not found" });
       }
       res.status(500).json({ success: false, message: error.message });
     } else {

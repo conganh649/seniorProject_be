@@ -4,21 +4,18 @@ const SALT_I = 10;
 
 const userSchema = new mongoose.Schema(
   {
-    userName: { type: String, required: true, trim: true },
+    idCard: { type: String, required: true, trim: true, unique: true },
     fullName: { type: String },
     phoneNumber: { type: String },
-    email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
+    email: { type: String, required: true },
     address: { type: String },
+    gender: { type: String, enum: ["Male", "Female"] },
     dateofbirth: { type: Date, default: Date.now },
     role: {
       type: String,
-      enum: ["admin", "customer"],
-      default: "customer",
-    },
-    activated: {
-      type: Boolean,
-      default: false,
+      enum: ["User", "Manager"],
+      default: "User",
     },
   },
   {

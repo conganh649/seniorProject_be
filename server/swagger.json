@@ -1,0 +1,342 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "DUT's Senior Project - Covid 19 Neighborhood Management",
+    "description": "This is my APIs for Senior Project",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "tags": [
+    {
+      "name": "Authentication & Sign up",
+      "description": "API for users to sign in and sign up"
+    },
+    {
+      "name": "Users",
+      "description": "API for users in the system"
+    }
+  ],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "paths": {
+    "/api/signup": {
+      "post": {
+        "tags": ["Authentication & Sign up"],
+        "summary": "Create a new acccount",
+        "requestBody": {
+          "description": "User object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "idCard": {
+                    "type": "string"
+                  },
+                  "fullName": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Create user successfully",
+            "schema": {
+              "$ref": "#/definitions/users"
+            }
+          },
+          "409": {
+            "description": "The idCard you have entered is already associated with another account"
+          },
+          "500": {
+            "description": "User validation failed: Wrong role (user/manager)"
+          }
+        }
+      }
+    },
+    "/api/signin": {
+      "post": {
+        "tags": ["Authentication & Sign up"],
+        "summary": "Login with existing user",
+        "requestBody": {
+          "description": "User object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "idCard": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login successfully"
+          },
+          "404": {
+            "description": "IDcard is not found"
+          },
+          "401": {
+            "description": "Invalid password"
+          }
+        }
+      }
+    },
+    "/api/users/": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "Create a new user",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "User object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#definitions/users"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Create user successfully",
+            "schema": {
+              "$ref": "#/definitions/users"
+            }
+          },
+          "403": {
+            "description": "A token is required for authorization"
+          },
+          "401": {
+            "description": "Invalid Token"
+          },
+          "409": {
+            "description": "The idCard you have entered is already associated with another account"
+          },
+          "500": {
+            "description": "User validation failed: Wrong role (user/manager)"
+          }
+        }
+      },
+      "get": {
+        "tags": ["Users"],
+        "summary": "Get all users in the system",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get all users successfully",
+            "schema": {
+              "$ref": "#/definitions/users"
+            }
+          },
+          "403": {
+            "description": "A token is required for authorization"
+          },
+          "401": {
+            "description": "Invalid Token"
+          }
+        }
+      }
+    },
+    "/api/users": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Get user in the system by id",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "id",
+            "required": true,
+            "description": "Id of user",
+            "schema": { "type": "string" }
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "User object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#definitions/users"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Get user successfully",
+            "schema": {
+              "$ref": "#/definitions/users"
+            }
+          },
+          "403": {
+            "description": "A token is required for authorization"
+          },
+          "401": {
+            "description": "Invalid Token"
+          }
+        }
+      }
+    },
+    "/api/users/{id}": {
+      "put": {
+        "tags": ["Users"],
+        "summary": "Edit user in the system by id",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "Id of user",
+            "schema": { "type": "string" }
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Update user successfully",
+            "schema": {
+              "$ref": "#/definitions/users"
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "403": {
+            "description": "A token is required for authorization"
+          },
+          "401": {
+            "description": "Invalid Token"
+          },
+          "500": {
+            "description": "idCard duplicated"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Users"],
+        "summary": "Delete user in the system by id",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "Id of user",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Delete user successfully"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "403": {
+            "description": "A token is required for authorization"
+          },
+          "401": {
+            "description": "Invalid Token"
+          },
+          "500": {
+            "description": "User not found"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "users": {
+      "type": "object",
+      "properties": {
+        "idCard": {
+          "type": "string",
+          "required": true
+        },
+        "fullName": {
+          "type": "string",
+          "required": true
+        },
+        "phoneNumber": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string",
+          "required": true
+        },
+        "email": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        },
+        "dateofbirth": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

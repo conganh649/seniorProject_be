@@ -3,26 +3,26 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 exports.createOne = async function (req) {
-  const { email } = req.body;
-  const userCheck = await User.findOne({ email });
+  const { idCard } = req.body;
+  const userCheck = await User.findOne({ idCard });
   if (userCheck) {
     throw {
       status: 409,
       message:
-        "The email address you have entered is already associated with another account",
+        "The idCard you have entered is already associated with another account",
     };
   }
   const user = new User({
-    userName: req.body.userName,
+    idCard: req.body.idCard,
     fullName: req.body.fullName,
     password: req.body.password,
     phoneNumber: req.body.phoneNumber,
     email: req.body.email,
     address: req.body.address,
+    gender: req.body.gender,
     dateofbirth: req.body.dateofbirth,
     role: req.body.role,
   });
-
   return await user.save(user);
 };
 
@@ -117,38 +117,6 @@ exports.deleteById = async function (req) {
 };
 
 //AUTH
-exports.activateByEmail = async function (req) {
-  let success = false;
-
-  const id = req.id;
-  await User.findByIdAndUpdate(
-    id,
-    { activated: req.activated },
-    {
-      useFindAndModify: false,
-    }
-  )
-    .then((data) => {
-      if (!data) {
-        throw {
-          status: 404,
-          success: false,
-          message: "User not found",
-        };
-      } else {
-        success = true;
-      }
-    })
-    .catch((err) => {
-      throw {
-        status: err.status || 500,
-        success: false,
-        message: err.message,
-      };
-    });
-  return success;
-};
-
 const checkExist = (obj) => {
   if (typeof obj === "undefined" || obj === null) {
     return false;
@@ -156,29 +124,29 @@ const checkExist = (obj) => {
   return true;
 };
 
-exports.signin = async (userName, password) => {
-  const user = await User.findOne({ userName });
+exports.signin = async (idCard, password) => {
+  const user = await User.findOne({ idCard });
   if (checkExist(user) === false) {
-    throw new Error("incorrect_username");
+    throw new Error("incorrect_idCard");
   }
   const match = await bcrypt.compare(password, user.password);
   if (match === false) {
     throw new Error("invalid_password");
   }
+
   const token = jwt.sign(
     {
       _id: user._id,
-      name: user.userName,
+      idCard: user.idCard,
       email: user.email,
       password: password,
       role: user.role,
     },
-    process.env.TOKEN_SECRET,
-    { expiresIn: "24h" }
+    process.env.TOKEN_SECRET
   );
   const info = {
     id_user: user._id,
-    name: user.userName,
+    idCard: user.idCard,
     email: user.email,
     role: user.role,
   };
