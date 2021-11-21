@@ -17,6 +17,7 @@ route.post("/api/users", verifyToken, userController.create);
 route.get("/api/users", verifyToken, userController.find);
 route.put("/api/users/:id", verifyToken, userController.update);
 route.delete("/api/users/:id", verifyToken, userController.delete);
+route.put("/api/users/pass/:id", verifyToken, userController.change);
 
 // // PRODUCTS
 // route.get("/api/products", productController.getAll);

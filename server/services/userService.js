@@ -1,6 +1,7 @@
 var User = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const SALT_I = 10;
 
 exports.createOne = async function (req) {
   const { idCard } = req.body;
@@ -115,6 +116,9 @@ exports.deleteById = async function (req) {
     });
   return success;
 };
+
+//CHANGE PASSWORD
+const changePass = async function (req) {};
 
 //AUTH
 const checkExist = (obj) => {

@@ -1,4 +1,7 @@
 var userService = require("../services/userService");
+var User = require("../models/userModel");
+const bcrypt = require("bcrypt");
+const SALT_I = 10;
 
 // CREATE AND SAVE NEW USER
 exports.create = async (req, res) => {
@@ -88,11 +91,53 @@ exports.delete = async (req, res) => {
       .json({ success: result, message: "User deleted successfully" });
   } catch (error) {
     if (!error.status) {
-      res.status(500).json({ success: false, message: error.message });
+      res.status(500).send({ success: false, message: error.message });
     } else {
       res
         .status(error.status)
-        .json({ success: error.success, message: error.message });
+        .send({ success: error.success, message: error.message });
     }
+  }
+};
+
+// CHANGE PASSWORD
+exports.change = async (req, res) => {
+  console.log(req.params.id);
+  let check = true;
+  try {
+    const { oldPassword, newPassword } = req.body;
+    let updatedPassword = {
+      password: newPassword,
+    };
+    const user = await User.findOne({ _id: req.params.id });
+    console.log(user);
+    // validate old password
+    const checkPass = await bcrypt.compare(
+      oldPassword,
+      user.password,
+      function (err, match) {
+        console.log("Match ne : === " + match);
+        if (!match || err) {
+          console.log("Sai pass cu ne alo");
+          check = false;
+          return res.status(400).send("Please enter correct old password");
+        } else {
+          user.password = newPassword;
+          console.log(user);
+          user.save();
+          console.log("Doi pass ne alo");
+          res
+            .status(200)
+            .json({
+              success: "true",
+              message: "Password updated successfully",
+            });
+        }
+      }
+    );
+  } catch (err) {
+    console.log("Vao day chi nua");
+    console.log(err);
+    res.status(400).send("Something went wrong. Try again");
   }
 };
