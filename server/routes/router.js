@@ -3,7 +3,7 @@ const route = express.Router();
 
 const userController = require("../controller/userController");
 const authController = require("../controller/authController");
-// const productController = require("../controller/productController");
+const productController = require("../controller/productController");
 // const cartController = require("../controller/cartController");
 // const labelController = require("../controller/labelController");
 // const categoryController = require("../controller/categoryController");
@@ -19,12 +19,12 @@ route.put("/api/users/:id", verifyToken, userController.update);
 route.delete("/api/users/:id", verifyToken, userController.delete);
 route.put("/api/users/pass/:id", verifyToken, userController.change);
 
-// // PRODUCTS
-// route.get("/api/products", productController.getAll);
-// route.post("/api/products", verifyToken, productController.create);
-// route.get("/api/products/:id", productController.getOne);
-// route.put("/api/products/:id", verifyToken, productController.update);
-// route.delete("/api/products/:id", verifyToken, productController.delete);
+// PRODUCTS
+route.get("/api/products", verifyToken, productController.getAll);
+route.post("/api/products", verifyToken, productController.create);
+route.get("/api/products/:id", verifyToken, productController.getOne);
+route.put("/api/products/:id", verifyToken, productController.update);
+route.delete("/api/products/:id", verifyToken, productController.delete);
 
 //AUTH
 route.post("/api/signup", authController.signup);

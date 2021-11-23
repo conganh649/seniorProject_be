@@ -28,7 +28,7 @@ async function seedData() {
   await connectDB();
   await User.remove({});
   let i = 0;
-  for (i = 0; i < 52; i++) {
+  for (i = 0; i < result.users.length; i++) {
     const newUser = new User({
       idCard: result.users[i].idCard,
       fullName: result.users[i].fullName,
