@@ -4,7 +4,7 @@ const route = express.Router();
 const userController = require("../controller/userController");
 const authController = require("../controller/authController");
 const productController = require("../controller/productController");
-// const cartController = require("../controller/cartController");
+const orderController = require("../controller/orderController");
 // const labelController = require("../controller/labelController");
 // const categoryController = require("../controller/categoryController");
 
@@ -29,12 +29,12 @@ route.delete("/api/products/:id", verifyToken, productController.delete);
 //AUTH
 route.post("/api/signup", authController.signup);
 route.post("/api/signin", authController.signin);
-// // CARTS
-// route.post("/api/carts", verifyToken, cartController.createCart);
-// route.get("/api/carts", verifyToken, cartController.getCartItem);
-// route.delete("/api/carts/:id", verifyToken, cartController.deleteCartItem);
-// route.put("/api/carts/:id", verifyToken, cartController.updateCartItem);
-// route.get("/api/carts/:id", verifyToken, cartController.getCartItemById);
+
+// ORDERS
+route.post("/api/orders", verifyToken, orderController.createOne);
+route.get("/api/orders", verifyToken, orderController.getOrder);
+route.delete("/api/orders/:id", verifyToken, orderController.deleteOrder);
+route.put("/api/orders/:id", verifyToken, orderController.updateOrder);
 
 // //LABELS
 // route.post("/api/labels", verifyToken, labelController.createLabel);

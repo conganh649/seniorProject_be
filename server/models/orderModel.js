@@ -1,16 +1,18 @@
+const { stubString } = require("lodash");
 const mongoose = require("mongoose");
 
 const orderSchema = new mongoose.Schema(
   {
     orderDetail: [
       {
-        quantity: { type: Number, required: true },
-        price: { type: Number, required: true },
+        quantity: { type: String, required: true },
+        price: { type: String, required: true },
         product: {
           type: mongoose.Schema.Types.ObjectId,
           ref: "Product",
           required: true,
         },
+        productThumbnail: { type: String },
       },
     ],
     totalPrice: { type: Number },
@@ -24,4 +26,4 @@ const orderSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Order", cartSchema);
+module.exports = mongoose.model("Order", orderSchema);
