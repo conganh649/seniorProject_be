@@ -1,6 +1,6 @@
 const orderService = require("../services/orderService");
 const Order = require("../models/orderModel");
-
+const Product = require("../models/productModel");
 const createOne = async (req, res) => {
   try {
     if (!Object.keys(req.body).length) {
@@ -9,6 +9,17 @@ const createOne = async (req, res) => {
     }
     let newOrder = new Order(req.body);
     const order = await newOrder.save();
+    for (var i = 0; i < newOrder.orderDetail.length; i++) {
+      let productId = newOrder.orderDetail[i].product.toString();
+      let buyQuantity = newOrder.orderDetail[i].quantity.toString();
+      await Product.find({ _id: productId }).then(async (data) => {
+        data[0].quantity = (
+          Number.parseInt(data[0].quantity) - Number.parseInt(buyQuantity)
+        ).toString();
+        let saveProduct = new Product(data[0]);
+        await saveProduct.save();
+      });
+    }
     res.status(200).json({
       success: true,
       message: "Create order successfully",
