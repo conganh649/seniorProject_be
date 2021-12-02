@@ -9,9 +9,9 @@ dotenv.config();
 var mongoose = require("mongoose");
 mongoose.Promise = require("bluebird");
 
-var Cart = require("../models/cartModel");
-var Product = require("../models/productModel");
+var Neighborhood = require("../models/neighborhoodModel");
 var User = require("../models/userModel");
+var Family = require("../models/familyModel");
 
 async function connect() {
   await connectDB();
@@ -33,8 +33,8 @@ new Promise((resolve) => {
         });
       },
       (callback) => {
-        Product.find({}).exec((err, product_ids) => {
-          callback(null, product_ids);
+        Neighborhood.find({}).exec((err, neighborhood_ids) => {
+          callback(null, neighborhood_ids);
         });
       },
     ],
@@ -44,7 +44,6 @@ new Promise((resolve) => {
     }
   );
 }).then((results) => {
-  console.log(_.sample(results[1]));
   referenceData = results;
   seedData();
 });
@@ -53,17 +52,11 @@ const result = excelToJson({
   sourceFile: __dirname + "/data.xlsx",
   sheets: [
     {
-      name: "cartTest",
+      name: "family",
       header: { rows: 1 },
       columnToKey: {
-        A: "qty",
-        B: "price",
-        C: "status",
-        D: "fullName",
-        E: "phoneNumber",
-        F: "address",
-        G: "user",
-        H: "product",
+        A: "familyName",
+        B: "familyOwnerId",
       },
     },
   ],
@@ -71,32 +64,27 @@ const result = excelToJson({
 
 async function seedData() {
   await connect();
-  await Cart.remove({});
+  await Family.remove({});
   let i = 0;
   let j = 0;
-  for (i = 0; i < result.cartTest.length; i++) {
-    let rand = Math.floor(Math.random() * (5 - 1 + 1) + 1);
-    let carts = [];
+  for (i = 0; i < result.family.length; i++) {
+    let rand = Math.floor(Math.random() * (3 - 1 + 1) + 1);
+    let members = [];
 
     for (j = 0; j < rand; j++) {
-      carts.push({
-        qty: Math.floor(Math.random() * (10 - 1 + 1) + 1),
-        product: _.sample(referenceData[1])._id.toString(),
-        price: _.sample(referenceData[1]).price.toString(),
+      members.push({
+        memberId: _.sample(referenceData[0])._id.toString(),
+        memberName: _.sample(referenceData[0]).fullName.toString(),
       });
     }
 
-    const newCart = new Cart({
-      cartItem: carts,
-      status: result.cartTest[i].status,
-      shippingAddress: {
-        fullName: result.cartTest[i].fullName,
-        phoneNumber: result.cartTest[i].phoneNumber,
-        address: result.cartTest[i].address,
-      },
-      user: _.sample(referenceData[0])._id.toString(),
+    const newFamily = new Family({
+      familyName: result.family[i].familyName,
+      familyOwnerId: result.family[i].familyOwnerId,
+      members: members,
+      neighborhood: _.sample(referenceData[1])._id.toString(),
     });
-    newCart.save(newCart);
-    console.log(i + "-" + newCart.user + " saved");
+    newFamily.save(newFamily);
+    console.log(i + "-" + newFamily.familyName + " saved");
   }
 }

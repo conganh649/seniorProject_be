@@ -11,4 +11,4 @@ const neighborhoodSchema = new mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model("Neighborhood", userSchema);
+module.exports = mongoose.model("Neighborhood", neighborhoodSchema);

@@ -5,8 +5,7 @@ const userController = require("../controller/userController");
 const authController = require("../controller/authController");
 const productController = require("../controller/productController");
 const orderController = require("../controller/orderController");
-// const labelController = require("../controller/labelController");
-// const categoryController = require("../controller/categoryController");
+const familyController = require("../controller/familyController");
 
 const verifyToken = require("../middleware/auth");
 
@@ -36,25 +35,10 @@ route.get("/api/orders", verifyToken, orderController.getOrder);
 route.delete("/api/orders/:id", verifyToken, orderController.deleteOrder);
 route.put("/api/orders/:id", verifyToken, orderController.updateOrder);
 
-// //LABELS
-// route.post("/api/labels", verifyToken, labelController.createLabel);
-// route.get("/api/labels", labelController.getLabel);
-// route.get("/api/labels/:id", labelController.getLabelById);
-// route.put("/api/labels/:id", verifyToken, labelController.updateLabel);
-// route.delete("/api/labels/:id", verifyToken, labelController.deleteLabel);
+// FAMILIES
+route.get("/api/family", verifyToken, familyController.getFamily);
+route.post("/api/family", verifyToken, familyController.createOne);
+route.put("/api/family/:id", verifyToken, familyController.updateFamily);
+route.delete("/api/family/:id", verifyToken, familyController.deleteFamily);
 
-// //CATEGORIES
-// route.post("/api/categories", verifyToken, categoryController.createCategory);
-// route.get("/api/categories", categoryController.getCategory);
-// route.get("/api/categories/:id", categoryController.getCategoryById);
-// route.put(
-//   "/api/categories/:id",
-//   verifyToken,
-//   categoryController.updateCategory
-// );
-// route.delete(
-//   "/api/categories/:id",
-//   verifyToken,
-//   categoryController.deleteCategory
-// );
 module.exports = route;

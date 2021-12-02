@@ -2,7 +2,21 @@ const mongoose = require("mongoose");
 
 const familySchema = new mongoose.Schema(
   {
-    members: [{ type: mongoose.Schema.ObjectId, ref: "User", required: true }],
+    familyName: { type: String },
+    familyOwnerId: { type: String, required: true, unique: true },
+    members: [
+      {
+        memberId: {
+          type: mongoose.Schema.ObjectId,
+          ref: "User",
+          required: true,
+        },
+        memberName: {
+          type: String,
+          required: true,
+        },
+      },
+    ],
     neighborhood: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Neighborhood",
@@ -16,4 +30,4 @@ const familySchema = new mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model("Family", userSchema);
+module.exports = mongoose.model("Family", familySchema);
