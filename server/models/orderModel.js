@@ -12,7 +12,7 @@ const orderSchema = new mongoose.Schema(
           ref: "Product",
           required: true,
         },
-        productThumbnail: { type: String },
+        productThumbnail: { type: String, required: true },
       },
     ],
     totalPrice: { type: Number },
