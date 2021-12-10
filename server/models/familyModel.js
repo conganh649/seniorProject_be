@@ -22,6 +22,7 @@ const familySchema = new mongoose.Schema(
       ref: "Neighborhood",
       required: true,
     },
+    address: { type: String, required: true },
     culturalFamilyRating: { type: Number },
     inNeedFamilyRating: { type: Number },
   },
