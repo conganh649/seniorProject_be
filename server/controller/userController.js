@@ -149,8 +149,8 @@ exports.militaryService = async (req, res) => {
   try {
     User.find({
       dateofbirth: {
-        $gte: moment(new Date()).subtract(18, "years"),
-        $lte: moment(new Date()).subtract(25, "years"),
+        $gte: moment(new Date()).subtract(25, "years"),
+        $lte: moment(new Date()).subtract(18, "years"),
       },
       gender: "Male",
     })
