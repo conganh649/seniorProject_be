@@ -1,5 +1,6 @@
 var userService = require("../services/userService");
 var User = require("../models/userModel");
+var moment = require("moment");
 const bcrypt = require("bcrypt");
 const SALT_I = 10;
 
@@ -126,12 +127,10 @@ exports.change = async (req, res) => {
           console.log(user);
           user.save();
           console.log("Doi pass ne alo");
-          res
-            .status(200)
-            .json({
-              success: "true",
-              message: "Password updated successfully",
-            });
+          res.status(200).json({
+            success: "true",
+            message: "Password updated successfully",
+          });
         }
       }
     );
@@ -139,5 +138,41 @@ exports.change = async (req, res) => {
     console.log("Vao day chi nua");
     console.log(err);
     res.status(400).send("Something went wrong. Try again");
+  }
+};
+
+const calculateBirthday = (birthday) => {
+  return (new Date() - birthday) / 1000 / 60 / 60 / 24 / 365;
+};
+
+exports.militaryService = async (req, res) => {
+  try {
+    User.find({
+      dateofbirth: {
+        $gte: moment(new Date()).subtract(18, "years"),
+        $lte: moment(new Date()).subtract(25, "years"),
+      },
+      gender: "Male",
+    })
+      .then((result) => {
+        res.status(200).json({
+          success: true,
+          data: result,
+        });
+      })
+      .catch((err) => {
+        res.status(err.status || 500).json({
+          success: false,
+          message: err.message || "err occurred while retrieving data",
+        });
+      });
+  } catch (error) {
+    if (!error.status) {
+      res.status(500).send({ success: false, message: error.message });
+    } else {
+      res
+        .status(error.status)
+        .send({ success: error.success, message: error.message });
+    }
   }
 };

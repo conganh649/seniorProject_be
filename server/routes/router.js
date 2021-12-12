@@ -17,6 +17,7 @@ route.get("/api/users", verifyToken, userController.find);
 route.put("/api/users/:id", verifyToken, userController.update);
 route.delete("/api/users/:id", verifyToken, userController.delete);
 route.put("/api/users/pass/:id", verifyToken, userController.change);
+route.get("/api/users/military", verifyToken, userController.militaryService);
 
 // PRODUCTS
 route.get("/api/products", verifyToken, productController.getAll);
@@ -40,5 +41,10 @@ route.get("/api/family", verifyToken, familyController.getFamily);
 route.post("/api/family", verifyToken, familyController.createOne);
 route.put("/api/family/:id", verifyToken, familyController.updateFamily);
 route.delete("/api/family/:id", verifyToken, familyController.deleteFamily);
+route.get(
+  "/api/family/cultural",
+  verifyToken,
+  familyController.getCulturalFamily
+);
 
 module.exports = route;

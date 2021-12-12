@@ -127,9 +127,36 @@ const updateFamily = async (req, res) => {
     });
 };
 
+const getCulturalFamily = async (req, res) => {
+  try {
+    await Family.find({ culturalFamilyRating: { $gte: 90 } })
+      .then((result) => {
+        res.status(200).json({
+          success: true,
+          data: result,
+        });
+      })
+      .catch((err) => {
+        res.status(err.status || 500).json({
+          success: false,
+          message: err.message || "err occurred while retrieving data",
+        });
+      });
+  } catch (error) {
+    if (!error.status) {
+      res.status(500).send({ success: false, message: error.message });
+    } else {
+      res
+        .status(error.status)
+        .send({ success: error.success, message: error.message });
+    }
+  }
+};
+
 module.exports = {
   createOne,
   getFamily,
   deleteFamily,
   updateFamily,
+  getCulturalFamily,
 };
