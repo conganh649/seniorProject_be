@@ -17,6 +17,18 @@ const userSchema = new mongoose.Schema(
       enum: ["User", "Manager"],
       default: "User",
     },
+    cartDetail: [
+      {
+        name: { type: String },
+        quantity: { type: String },
+        price: { type: String },
+        product: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Product",
+        },
+        productThumbnail: { type: String },
+      },
+    ],
   },
   {
     timestamps: true,

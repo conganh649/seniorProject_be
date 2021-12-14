@@ -2,8 +2,12 @@ const mongoose = require("mongoose");
 
 const familySchema = new mongoose.Schema(
   {
-    familyName: { type: String },
-    familyOwnerId: { type: String, required: true, unique: true },
+    familyOwnerName: { type: String },
+    familyOwnerIdCard: { type: String, required: true, unique: true },
+    origin: { type: String, required: true },
+    ethnic: { type: String, required: true },
+    religion: { type: String, required: true },
+    occupation: { type: String, required: true },
     members: [
       {
         memberId: {
@@ -11,20 +15,32 @@ const familySchema = new mongoose.Schema(
           ref: "User",
           required: true,
         },
+        memberIdCard: {
+          type: String,
+          required: true,
+          unique: true,
+        },
         memberName: {
           type: String,
           required: true,
         },
+        origin: { type: String, required: true },
+        ethnic: { type: String, required: true },
+        religion: { type: String, required: true },
+        occupation: { type: String, required: true },
       },
     ],
-    neighborhood: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Neighborhood",
-      required: true,
-    },
     address: { type: String, required: true },
-    culturalFamilyRating: { type: Number },
-    inNeedFamilyRating: { type: Number },
+    culturalFamilyRating: [
+      {
+        year: {
+          type: String,
+        },
+        rating: {
+          type: Number,
+        },
+      },
+    ],
   },
   {
     timestamps: true,
