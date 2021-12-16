@@ -128,8 +128,17 @@ const updateFamily = async (req, res) => {
 };
 
 const getCulturalFamily = async (req, res) => {
+  let year = req.body.year;
+  console.log(year);
   try {
-    await Family.find({ culturalFamilyRating: { $gte: 90 } })
+    await Family.find({
+      culturalFamilyRating: {
+        $elemMatch: {
+          year: year.toString(),
+          rating: { $gte: Number.parseInt(90) },
+        },
+      },
+    })
       .then((result) => {
         res.status(200).json({
           success: true,

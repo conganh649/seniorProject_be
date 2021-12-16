@@ -10,11 +10,6 @@ const familySchema = new mongoose.Schema(
     occupation: { type: String, required: true },
     members: [
       {
-        memberId: {
-          type: mongoose.Schema.ObjectId,
-          ref: "User",
-          required: true,
-        },
         memberIdCard: {
           type: String,
           required: true,
