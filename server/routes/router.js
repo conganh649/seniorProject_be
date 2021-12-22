@@ -1,5 +1,6 @@
 const express = require("express");
 const route = express.Router();
+const fetch = require("node-fetch");
 
 const userController = require("../controller/userController");
 const authController = require("../controller/authController");
@@ -46,5 +47,37 @@ route.get(
   verifyToken,
   familyController.getCulturalFamily
 );
+
+// NOTIFICATIONS
+route.post("/api/notification/sendToAll", verifyToken, (req, res) => {
+  var notification = {
+    title: "Title of notification",
+    text: "Subtitle",
+  };
+
+  var fcm_tokens = [];
+
+  var notifications_body = {
+    notification: notification,
+    registration_ids: fcm_tokens,
+  };
+  fetch("https://fcm.googleapis.com/fcm/send", {
+    method: "POST",
+    headers: {
+      Authorization:
+        "key=" +
+        "AAAAzRXqY0k:APA91bF9EsvA7NBVY3JYNfQuVQx-twV9p16EcynLmXXSObOqGiQ1t4HmDEHnqUQcaE4aIlIFxq5EnIWm_GChPPnZp3XIy79DjqyU-Gpk8KLqIBLFHkyplGvNf8yZaIsny5Khl8QkjLDa",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(notification_body),
+  })
+    .then(() => {
+      res.status(200).send("Notification sent successfully");
+    })
+    .catch((err) => {
+      res.status(400).send("Something went wrong");
+      console.log(err);
+    });
+});
 
 module.exports = route;
