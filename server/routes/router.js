@@ -55,7 +55,9 @@ route.post("/api/notification/sendToAll", verifyToken, (req, res) => {
     text: "Subtitle",
   };
 
-  var fcm_tokens = ['fPWsN72hR461fL8m0thcbW:APA91bGW8cojNr4FPNkNQhg84GwRqqHqVAzVW7fG798_3EL5Xws6l0FRyuG1LcToMATL7qT8IZr1IyaMyyFyLSt93sPA_7ZT0dSTpzOX_ajzsiJ2MD7VGMurv-QlYL1pwW412QSCK_0A'];
+  var fcm_tokens = [
+    "fPWsN72hR461fL8m0thcbW:APA91bGW8cojNr4FPNkNQhg84GwRqqHqVAzVW7fG798_3EL5Xws6l0FRyuG1LcToMATL7qT8IZr1IyaMyyFyLSt93sPA_7ZT0dSTpzOX_ajzsiJ2MD7VGMurv-QlYL1pwW412QSCK_0A",
+  ];
 
   var notifications_body = {
     notification: notification,
@@ -69,7 +71,7 @@ route.post("/api/notification/sendToAll", verifyToken, (req, res) => {
         "AAAAzRXqY0k:APA91bF9EsvA7NBVY3JYNfQuVQx-twV9p16EcynLmXXSObOqGiQ1t4HmDEHnqUQcaE4aIlIFxq5EnIWm_GChPPnZp3XIy79DjqyU-Gpk8KLqIBLFHkyplGvNf8yZaIsny5Khl8QkjLDa",
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(notification_body),
+    body: JSON.stringify(notifications_body),
   })
     .then(() => {
       res.status(200).send("Notification sent successfully");
