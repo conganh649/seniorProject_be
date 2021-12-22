@@ -55,7 +55,7 @@ route.post("/api/notification/sendToAll", verifyToken, (req, res) => {
     text: "Subtitle",
   };
 
-  var fcm_tokens = [];
+  var fcm_tokens = ['fPWsN72hR461fL8m0thcbW:APA91bGW8cojNr4FPNkNQhg84GwRqqHqVAzVW7fG798_3EL5Xws6l0FRyuG1LcToMATL7qT8IZr1IyaMyyFyLSt93sPA_7ZT0dSTpzOX_ajzsiJ2MD7VGMurv-QlYL1pwW412QSCK_0A'];
 
   var notifications_body = {
     notification: notification,
