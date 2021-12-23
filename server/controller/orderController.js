@@ -17,8 +17,9 @@ const createOne = async (req, res) => {
           title: "New order",
           body: `${req.body.name} has just placed an order. Please check!`,
         },
-        registration_ids: data.fcm_token,
+        registration_ids: [data[0].fcm_token],
       };
+      console.log(notifications_body);
       fetch("https://fcm.googleapis.com/fcm/send", {
         method: "POST",
         headers: {
