@@ -29,6 +29,7 @@ const userSchema = new mongoose.Schema(
         productThumbnail: { type: String },
       },
     ],
+    fcm_token: { type: String },
   },
   {
     timestamps: true,

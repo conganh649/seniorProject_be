@@ -7,7 +7,7 @@ const authController = require("../controller/authController");
 const productController = require("../controller/productController");
 const orderController = require("../controller/orderController");
 const familyController = require("../controller/familyController");
-
+const notificationController = require("../controller/notificationController");
 const verifyToken = require("../middleware/auth");
 
 // API
@@ -49,38 +49,10 @@ route.post(
 );
 
 // NOTIFICATIONS
-route.post("/api/notification/sendToAll", verifyToken, (req, res) => {
-  var notification = {
-    title: "Title of notification",
-    text: "Subtitle",
-  };
-
-  var fcm_tokens = [
-    "fPWsN72hR461fL8m0thcbW:APA91bGW8cojNr4FPNkNQhg84GwRqqHqVAzVW7fG798_3EL5Xws6l0FRyuG1LcToMATL7qT8IZr1IyaMyyFyLSt93sPA_7ZT0dSTpzOX_ajzsiJ2MD7VGMurv-QlYL1pwW412QSCK_0A",
-  ];
-
-  var notifications_body = {
-    to: "/topics/all",
-    notification: req.body,
-    // registration_ids: fcm_tokens,
-  };
-  fetch("https://fcm.googleapis.com/fcm/send", {
-    method: "POST",
-    headers: {
-      Authorization:
-        "key=" +
-        "AAAAzRXqY0k:APA91bF9EsvA7NBVY3JYNfQuVQx-twV9p16EcynLmXXSObOqGiQ1t4HmDEHnqUQcaE4aIlIFxq5EnIWm_GChPPnZp3XIy79DjqyU-Gpk8KLqIBLFHkyplGvNf8yZaIsny5Khl8QkjLDa",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(notifications_body),
-  })
-    .then(() => {
-      res.status(200).send("Notification sent successfully");
-    })
-    .catch((err) => {
-      res.status(400).send("Something went wrong");
-      console.log(err);
-    });
-});
+route.post(
+  "/api/notification/sendToAll",
+  verifyToken,
+  notificationController.sendToAll
+);
 
 module.exports = route;
