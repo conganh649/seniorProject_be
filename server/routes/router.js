@@ -55,4 +55,9 @@ route.post(
   notificationController.sendToAll
 );
 
+route.post(
+  "/api/notification/sendToDevice",
+  verifyToken,
+  notificationController.sendToDevice
+);
 module.exports = route;
