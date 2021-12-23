@@ -26,8 +26,6 @@ exports.sendToAll = async (req, res) => {
 };
 
 exports.sendToDevice = async (req, res) => {
-  console.log(req.body.notification);
-  console.log(req.body.registration_ids);
   var notifications_body = {
     notification: req.body.notification,
     registration_ids: req.body.registration_ids,

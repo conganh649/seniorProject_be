@@ -1,12 +1,36 @@
 const orderService = require("../services/orderService");
 const Order = require("../models/orderModel");
 const Product = require("../models/productModel");
+const User = require("../models/userModel");
+const fetch = require("node-fetch");
+
 const createOne = async (req, res) => {
   try {
     if (!Object.keys(req.body).length) {
       res.status(400).send({ message: "Content can not be empty" });
       return;
     }
+    // console.log(req.body);
+    await User.find({ role: "Manager" }).then((data) => {
+      var notifications_body = {
+        notification: {
+          title: "New order",
+          body: `${req.body.name} has just placed an order. Please check!`,
+        },
+        registration_ids: data.fcm_token,
+      };
+      fetch("https://fcm.googleapis.com/fcm/send", {
+        method: "POST",
+        headers: {
+          Authorization:
+            "key=" +
+            "AAAAzRXqY0k:APA91bF9EsvA7NBVY3JYNfQuVQx-twV9p16EcynLmXXSObOqGiQ1t4HmDEHnqUQcaE4aIlIFxq5EnIWm_GChPPnZp3XIy79DjqyU-Gpk8KLqIBLFHkyplGvNf8yZaIsny5Khl8QkjLDa",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(notifications_body),
+      });
+    });
+
     let newOrder = new Order(req.body);
     const order = await newOrder.save();
     for (var i = 0; i < newOrder.orderDetail.length; i++) {
@@ -22,7 +46,8 @@ const createOne = async (req, res) => {
     }
     res.status(200).json({
       success: true,
-      message: "Create order successfully",
+      message:
+        "Create order successfully and send notification to manager successfully",
       data: order,
     });
   } catch (err) {
