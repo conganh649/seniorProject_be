@@ -60,7 +60,7 @@ route.post("/api/notification/sendToAll", verifyToken, (req, res) => {
   ];
 
   var notifications_body = {
-    to: "/topics/61c2c901a4f90be483ffc304",
+    to: "/topics/user_61c2c901a4f90be483ffc304",
     notification: req.body,
     // registration_ids: fcm_tokens,
   };
