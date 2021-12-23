@@ -60,8 +60,9 @@ route.post("/api/notification/sendToAll", verifyToken, (req, res) => {
   ];
 
   var notifications_body = {
-    notification: notification,
-    registration_ids: fcm_tokens,
+    to: "/topics/all",
+    notification: req.body,
+    // registration_ids: fcm_tokens,
   };
   fetch("https://fcm.googleapis.com/fcm/send", {
     method: "POST",
