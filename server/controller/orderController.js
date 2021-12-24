@@ -31,8 +31,8 @@ const createOne = async (req, res) => {
         {
           $push: {
             notification: {
-              title: req.body.notification.title,
-              body: req.body.notification.body,
+              title: "New order",
+              body: `${req.body.name} has just placed an order. Please check!`,
             },
           },
           $set: {
@@ -171,12 +171,30 @@ const deleteOrder = async (req, res) => {
 
 const updateOrder = async (req, res) => {
   let token = "";
+  let userId = [];
   await Order.findById(req.params.id).then(async (data) => {
     await User.findById(data.user).then((user) => {
       token = user.fcm_token;
+      userId.push(user._id);
     });
   });
-  console.log(req.body.status);
+  await User.updateMany(
+    {
+      _id: { $in: userId },
+    },
+    {
+      $push: {
+        notification: {
+          title: `Your order is now ${req.body.status}`,
+          body: "The neighborhood manager is working on your order.",
+        },
+      },
+      $set: {
+        newNoti: true,
+      },
+    },
+    { multi: true }
+  );
   await Order.findByIdAndUpdate(req.params.id, req.body, {
     useFindAndModify: false,
     returnOriginal: false,
