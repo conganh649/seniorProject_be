@@ -1,4 +1,3 @@
-const orderService = require("../services/orderService");
 const Order = require("../models/orderModel");
 const Product = require("../models/productModel");
 const User = require("../models/userModel");
@@ -19,7 +18,6 @@ const createOne = async (req, res) => {
         },
         registration_ids: [data[0].fcm_token],
       };
-      console.log(notifications_body);
       fetch("https://fcm.googleapis.com/fcm/send", {
         method: "POST",
         headers: {
@@ -149,6 +147,13 @@ const deleteOrder = async (req, res) => {
 };
 
 const updateOrder = async (req, res) => {
+  let token = "";
+  await Order.findById(req.params.id).then(async (data) => {
+    await User.findById(data.user).then((user) => {
+      token = user.fcm_token;
+    });
+  });
+  console.log(req.body.status);
   await Order.findByIdAndUpdate(req.params.id, req.body, {
     useFindAndModify: false,
     returnOriginal: false,
@@ -157,6 +162,23 @@ const updateOrder = async (req, res) => {
       if (!data) {
         res.status(404).send("Cart not found");
       } else {
+        var notifications_body = {
+          notification: {
+            title: `Your order is now ${req.body.status}`,
+            body: "The neighborhood manager is working on your order.",
+          },
+          registration_ids: [token],
+        };
+        fetch("https://fcm.googleapis.com/fcm/send", {
+          method: "POST",
+          headers: {
+            Authorization:
+              "key=" +
+              "AAAAzRXqY0k:APA91bF9EsvA7NBVY3JYNfQuVQx-twV9p16EcynLmXXSObOqGiQ1t4HmDEHnqUQcaE4aIlIFxq5EnIWm_GChPPnZp3XIy79DjqyU-Gpk8KLqIBLFHkyplGvNf8yZaIsny5Khl8QkjLDa",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(notifications_body),
+        });
         res.status(200).json(data);
       }
     })
