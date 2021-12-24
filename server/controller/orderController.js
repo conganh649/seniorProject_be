@@ -4,20 +4,43 @@ const User = require("../models/userModel");
 const fetch = require("node-fetch");
 
 const createOne = async (req, res) => {
+  let listManager = [];
+  let listId = [];
   try {
     if (!Object.keys(req.body).length) {
       res.status(400).send({ message: "Content can not be empty" });
       return;
     }
     // console.log(req.body);
-    await User.find({ role: "Manager" }).then((data) => {
+    await User.find({ role: "Manager" }).then(async (data) => {
+      data.map((manager, index) => {
+        listManager.push(manager.fcm_token);
+        listId.push(manager._id);
+      });
       var notifications_body = {
         notification: {
           title: "New order",
           body: `${req.body.name} has just placed an order. Please check!`,
         },
-        registration_ids: [data[0].fcm_token],
+        registration_ids: listManager,
       };
+      await User.updateMany(
+        {
+          _id: { $in: listId },
+        },
+        {
+          $push: {
+            notification: {
+              title: req.body.notification.title,
+              body: req.body.notification.body,
+            },
+          },
+          $set: {
+            newNoti: true,
+          },
+        },
+        { multi: true }
+      );
       fetch("https://fcm.googleapis.com/fcm/send", {
         method: "POST",
         headers: {

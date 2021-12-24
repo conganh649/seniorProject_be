@@ -29,6 +29,14 @@ const userSchema = new mongoose.Schema(
         productThumbnail: { type: String },
       },
     ],
+    notification: [
+      {
+        title: { type: String },
+        body: { type: String },
+        createdDate: { type: Date, default: Date.now },
+      },
+    ],
+    newNoti: { type: Boolean, default: false },
     fcm_token: { type: String },
   },
   {
