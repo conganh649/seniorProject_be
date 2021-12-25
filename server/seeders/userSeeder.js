@@ -27,6 +27,7 @@ const result = excelToJson({
 async function seedData() {
   await connectDB();
   await User.remove({});
+  let year = new Date().getFullYear().toString();
   let i = 0;
   for (i = 0; i < result.users.length; i++) {
     const newUser = new User({
@@ -39,6 +40,12 @@ async function seedData() {
       address: result.users[i].address,
       dateofbirth: result.users[i].dateofbirth,
       role: result.users[i].role,
+      delayCallCertification: [
+        {
+          year: year,
+          certification: false,
+        },
+      ],
     });
     newUser.save(newUser);
     console.log(i + "-" + newUser.idCard + " saved");

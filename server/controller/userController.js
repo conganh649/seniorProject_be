@@ -146,13 +146,22 @@ const calculateBirthday = (birthday) => {
 };
 
 exports.militaryService = async (req, res) => {
+  let year = req.query.year;
+  console.log(year);
   try {
     User.find({
       dateofbirth: {
-        $gte: moment(new Date()).subtract(25, "years"),
+        $gte: moment(new Date()).subtract(27, "years"),
         $lte: moment(new Date()).subtract(18, "years"),
       },
       gender: "Male",
+      army: false,
+      delayCallCertification: {
+        $elemMatch: {
+          year: year.toString(),
+          certification: false,
+        },
+      },
     })
       .then((result) => {
         res.status(200).json({

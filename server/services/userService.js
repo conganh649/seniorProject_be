@@ -5,6 +5,7 @@ const SALT_I = 10;
 
 exports.createOne = async function (req) {
   const { idCard } = req.body;
+  let year = new Date().getFullYear().toString();
   const userCheck = await User.findOne({ idCard });
   if (userCheck) {
     throw {
@@ -23,6 +24,12 @@ exports.createOne = async function (req) {
     gender: req.body.gender,
     dateofbirth: req.body.dateofbirth,
     role: req.body.role,
+    delayCallCertification: [
+      {
+        year: year,
+        certification: false,
+      },
+    ],
   });
   return await user.save(user);
 };

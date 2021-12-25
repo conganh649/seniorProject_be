@@ -38,6 +38,13 @@ const userSchema = new mongoose.Schema(
     ],
     newNoti: { type: Boolean, default: false },
     fcm_token: { type: String },
+    army: { type: Boolean, default: false },
+    delayCallCertification: [
+      {
+        year: { type: String },
+        certification: { type: Boolean },
+      },
+    ],
   },
   {
     timestamps: true,
