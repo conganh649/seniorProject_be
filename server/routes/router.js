@@ -8,6 +8,7 @@ const productController = require("../controller/productController");
 const orderController = require("../controller/orderController");
 const familyController = require("../controller/familyController");
 const notificationController = require("../controller/notificationController");
+const newsController = require("../controller/newsController");
 const verifyToken = require("../middleware/auth");
 
 // API
@@ -60,4 +61,11 @@ route.post(
   verifyToken,
   notificationController.sendToDevice
 );
+
+// NEWS
+route.post("/api/news", verifyToken, newsController.createOne);
+route.get("/api/news", verifyToken, newsController.getNews);
+route.delete("/api/news/:id", verifyToken, newsController.deleteNews);
+route.put("/api/news/:id", verifyToken, newsController.updateNews);
+
 module.exports = route;
