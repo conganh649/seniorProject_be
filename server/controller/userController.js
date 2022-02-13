@@ -156,12 +156,6 @@ exports.militaryService = async (req, res) => {
       },
       gender: "Male",
       army: false,
-      delayCallCertification: {
-        $elemMatch: {
-          year: year.toString(),
-          certification: false,
-        },
-      },
     })
       .then((result) => {
         res.status(200).json({
