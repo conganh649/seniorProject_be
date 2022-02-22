@@ -155,7 +155,7 @@ exports.militaryService = async (req, res) => {
         $lte: moment(new Date()).subtract(18, "years"),
       },
       gender: "Male",
-      army: false,
+      // army: false,
     })
       .then((result) => {
         res.status(200).json({
